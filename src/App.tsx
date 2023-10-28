@@ -27,7 +27,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>User Location</h1>
+      <h1>BreathEasy</h1>
       <p>{location}</p>
     </div>
   );
