@@ -1,4 +1,3 @@
 # BreatheEasy
 
-BreatheEasy repository! Our very innovative CAC qualifier!
-
+BreatheEasy: our very extremely greatly incredibly innovative CAC qualifier!
