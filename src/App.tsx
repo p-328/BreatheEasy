@@ -9,7 +9,7 @@ function App() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition);
     } else {
-      setLocation("Geolocation is not supported by this browser.");
+      setLocation("Geolocation is not supported by your browser/device.");
     }
   }
 
