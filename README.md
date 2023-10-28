@@ -1,4 +1,4 @@
 # BreatheEasy
 
-BreatheEasy repository. What's the point of this
+BreatheEasy repository! Our very innovative CAC qualifier!
 
