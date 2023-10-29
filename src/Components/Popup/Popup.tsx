@@ -6,7 +6,8 @@ export const Popup = () => {
 		setMedicalCondition(localStorage.getItem("medicalCondition"));
 	}, []);
 	useEffect(() => {
-		setClicked(localStorage.getItem("isClicked") == true);
+		if (localStorage.getItem("isClicked") == "true")
+			setClicked(true);
 	}, []);
 	function handleYes(e) {
 		e.preventDefault();
