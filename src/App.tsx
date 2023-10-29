@@ -21,10 +21,29 @@ function App() {
     setLocation(locationString);
   }
 
-  // Use useEffect to call getLocation when the component mounts
+  // Function to fetch data from the API
+  async function fetchData(location) {
+    try {
+      const apiUrl = `https://api.openaq.org/v1/latest?has_geo=true&coordinates=${location}&limit=100&radius=25000&order_by=distance`;
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      console.log(data);
+      // You can do more with the API data here
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  // Use useEffect to call getLocation and fetchData when the component mounts
   useEffect(() => {
     getLocation();
   }, []);
+
+  useEffect(() => {
+    if (location) {
+      fetchData(location);
+    }
+  }, [location]);
 
   return (
     <div className="App">
