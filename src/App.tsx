@@ -38,8 +38,17 @@ function App() {
         if (data.results && data.results.length > 0) {
           const locationData = data.results[0];
           const name = locationData.name;
-          const parameters = locationData.parameters.map((param) => `${param.parameter}: ${param.count} ${param.unit}`);
-          setApiResponse(`Name: ${name}\nParameters:\n${parameters.join('\n')}`);
+          // Filter parameters to exclude humidity, temperature, and pressure
+          const parameters = locationData.parameters.filter(
+            (param) =>
+              param.parameter !== 'humidity' &&
+              param.parameter !== 'temperature' &&
+              param.parameter !== 'pressure'
+          );
+          const parametersInfo = parameters.map(
+            (param) => `${param.parameter}: ${param.count} ${param.unit}`
+          );
+          setApiResponse(`Name: ${name}\nParameters:\n${parametersInfo.join('\n')}`);
         } else {
           setApiResponse('Location data not found.');
         }
