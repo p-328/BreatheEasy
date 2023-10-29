@@ -58,62 +58,73 @@ function App() {
     return dist;
   }
 
-  // Function to check if a date is more than one day old
-  function isMoreThanOneDayOld(date) {
-    const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
-    const currentDate = new Date();
-    return currentDate - date > oneDay;
+  // Function to format timestamp as "hours/minutes ago"
+  function formatTimeAgo(timestamp) {
+    const now = new Date();
+    const updatedTime = new Date(timestamp);
+    const diff = now - updatedTime;
+    const hours = Math.floor(diff / 3600000); // 1 hour = 3600000 milliseconds
+    if (hours > 0) {
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    }
+    const minutes = Math.floor(diff / 60000); // 1 minute = 60000 milliseconds
+    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
   }
 
   // Function to make the API request
-  function makeApiRequest(location) {
-    const apiUrl = `https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(location)}&radius=25000&order_by=distance&dump_raw=false`;
+  // Function to make the API request
+function makeApiRequest(location) {
+  const apiUrl = `https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(location)}&radius=25000&order_by=distance&dump_raw=false`;
 
-    fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        Host: 'api.openaq.org',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.results && data.results.length > 0) {
-          const parametersSeen = new Set();
-          let parametersInfo = [];
-          data.results.forEach((locationData) => {
-            const name = locationData.name;
-            const sensorCoordinates = locationData.coordinates;
-            const sensorDistance = calculateDistance(
-              parseFloat(location.split(',')[0]),
-              parseFloat(location.split(',')[1]),
-              sensorCoordinates.latitude,
-              sensorCoordinates.longitude
+  fetch(apiUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      Host: 'api.openaq.org',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.results && data.results.length > 0) {
+        const parametersSeen = new Set();
+        let parametersInfo = [];
+        const oneDayAgo = new Date();
+        oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+
+        data.results.forEach((locationData) => {
+          const name = locationData.name;
+          const sensorCoordinates = locationData.coordinates;
+          const sensorDistance = calculateDistance(
+            parseFloat(location.split(',')[0]),
+            parseFloat(location.split(',')[1]),
+            sensorCoordinates.latitude,
+            sensorCoordinates.longitude
+          );
+          const sortedParameters = locationData.parameters
+            .filter((param) =>
+              param.parameter !== 'humidity' &&
+              param.parameter !== 'temperature' &&
+              param.parameter !== 'pressure' &&
+              !parametersSeen.has(param.parameter) &&
+              new Date(param.lastUpdated) > oneDayAgo
+            )
+            .sort(customSort);
+
+          sortedParameters.forEach((param) => {
+            const timeAgo = formatTimeAgo(param.lastUpdated);
+            parametersInfo.push(
+              `${name} (Distance: ${sensorDistance.toFixed(2)} miles): ${param.parameter}: ${param.lastValue} ${param.unit} (Last Updated: ${timeAgo})`
             );
-            const sortedParameters = locationData.parameters
-              .filter((param) =>
-                param.parameter !== 'humidity' &&
-                param.parameter !== 'temperature' &&
-                param.parameter !== 'pressure' &&
-                !parametersSeen.has(param.parameter) &&
-                !isMoreThanOneDayOld(new Date(param.lastUpdated))
-              )
-              .sort(customSort); // Sort the parameters using the custom sorting function
-
-            sortedParameters.forEach((param) => {
-              parametersInfo.push(
-                `${name} (Distance: ${sensorDistance.toFixed(2)} miles): ${param.parameter}: ${param.lastValue} ${param.unit} (Last Updated: ${param.lastUpdated})`
-              );
-              parametersSeen.add(param.parameter);
-            });
+            parametersSeen.add(param.parameter);
           });
+        });
 
-          setApiResponse(`${parametersInfo.join('\n')}`);
-        } else {
-          setApiResponse('Location data not found.');
-        }
-      })
-      .catch((error) => setApiResponse('Error: ' + error.message));
+        setApiResponse(`${parametersInfo.join('\n')}`);
+      } else {
+        setApiResponse('Location data not found.');
+      }
+    })
+    .catch((error) => setApiResponse('Error: ' + error.message));
   }
 
   // Use useEffect to call getLocation and makeApiRequest when the component mounts
