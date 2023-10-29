@@ -58,6 +58,13 @@ function App() {
     return dist;
   }
 
+  // Function to check if a date is more than one day old
+  function isMoreThanOneDayOld(date) {
+    const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
+    const currentDate = new Date();
+    return currentDate - date > oneDay;
+  }
+
   // Function to make the API request
   function makeApiRequest(location) {
     const apiUrl = `https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(location)}&radius=25000&order_by=distance&dump_raw=false`;
@@ -88,13 +95,14 @@ function App() {
                 param.parameter !== 'humidity' &&
                 param.parameter !== 'temperature' &&
                 param.parameter !== 'pressure' &&
-                !parametersSeen.has(param.parameter)
+                !parametersSeen.has(param.parameter) &&
+                !isMoreThanOneDayOld(new Date(param.lastUpdated))
               )
               .sort(customSort); // Sort the parameters using the custom sorting function
 
             sortedParameters.forEach((param) => {
               parametersInfo.push(
-                `${name} (Distance: ${sensorDistance.toFixed(2)} miles): ${param.parameter}: ${param.average} ${param.unit}`
+                `${name} (Distance: ${sensorDistance.toFixed(2)} miles): ${param.parameter}: ${param.lastValue} ${param.unit} (Last Updated: ${param.lastUpdated})`
               );
               parametersSeen.add(param.parameter);
             });
