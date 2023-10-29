@@ -20,6 +20,7 @@ function App() {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     const locationString = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
+    console.log(location);
     setLocation(locationString);
   }
 
@@ -42,6 +43,23 @@ function App() {
     return numA - numB;
   }
 
+  // Function to calculate the Haversine distance between two coordinates
+  function calculateDistance(lat1, lon1, lat2, lon2) {
+    const radlat1 = (Math.PI * lat1) / 180;
+    const radlat2 = (Math.PI * lat2) / 180;
+    const radlon1 = (Math.PI * lon1) / 180;
+    const radlon2 = (Math.PI * lon2) / 180;
+    const theta = lon1 - lon2;
+    const radtheta = (Math.PI * theta) / 180;
+    let dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    dist = Math.acos(dist);
+    dist = (dist * 180) / Math.PI;
+    dist = dist * 60 * 1.1515; // Miles
+    return dist;
+  }
+
   // Function to make the API request
   function makeApiRequest(location) {
     const apiUrl = `https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(location)}&radius=25000&order_by=distance&dump_raw=false`;
@@ -60,6 +78,13 @@ function App() {
           let parametersInfo = [];
           data.results.forEach((locationData) => {
             const name = locationData.name;
+            const sensorCoordinates = locationData.coordinates;
+            const sensorDistance = calculateDistance(
+              parseFloat(location.split(',')[0]),
+              parseFloat(location.split(',')[1]),
+              sensorCoordinates.latitude,
+              sensorCoordinates.longitude
+            );
             const sortedParameters = locationData.parameters
               .filter((param) =>
                 param.parameter !== 'humidity' &&
@@ -70,12 +95,14 @@ function App() {
               .sort(customSort); // Sort the parameters using the custom sorting function
 
             sortedParameters.forEach((param) => {
-              parametersInfo.push(`${name}: ${param.parameter}: ${param.count} ${param.unit}`);
+              parametersInfo.push(
+                `${name} (Distance: ${sensorDistance.toFixed(2)} miles): ${param.parameter}: ${param.average} ${param.unit}`
+              );
               parametersSeen.add(param.parameter);
             });
           });
 
-          setApiResponse(`Parameters:\n${parametersInfo.join('\n')}`);
+          setApiResponse(`${parametersInfo.join('\n')}`);
         } else {
           setApiResponse('Location data not found.');
         }
@@ -98,8 +125,6 @@ function App() {
     <div className="App">
       <Popup />
       <h1>BreatheEasy</h1>
-      <p>{location}</p>
-      <h2>API Response</h2>
       <pre>{apiResponse}</pre>
     </div>
   );
