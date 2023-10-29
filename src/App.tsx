@@ -9,15 +9,16 @@ function App() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition);
     } else {
-      setLocation("Geolocation is not supported by your browser/device.");
+      setLocation("Geolocation is not supported by this browser.");
     }
   }
 
-  // Function to display the user's location
+  // Function to display the user's location in "lat,lng" format
   function showPosition(position) {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    setLocation(`Latitude: ${latitude}, Longitude: ${longitude}`);
+    const locationString = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
+    setLocation(locationString);
   }
 
   // Use useEffect to call getLocation when the component mounts
@@ -27,7 +28,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>BreathEasy</h1>
+      <h1>User Location</h1>
       <p>{location}</p>
     </div>
   );
