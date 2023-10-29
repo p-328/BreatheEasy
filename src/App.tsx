@@ -69,7 +69,7 @@ function App() {
               .sort(customSort); // Sort the parameters using the custom sorting function
 
             sortedParameters.forEach((param) => {
-              parametersInfo.push(`${name}: ${param.parameter}: ${param.count} ${param.unit}`);
+              parametersInfo.push(`${name}: ${param.parameter}: ${param.average} ${param.unit}`);
               parametersSeen.add(param.parameter);
             });
           });
