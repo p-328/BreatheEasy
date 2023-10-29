@@ -13,14 +13,14 @@ export const Popup = () => {
 		e.preventDefault();
 		localStorage.setItem("isClicked", "true");
 		setClicked(true);
-		localStorage.setItem("medicalCondition", "Yes");
+		localStorage.setItem("medicalCondition", "true");
 		setMedicalCondition("Yes");
 	} 
 	function handleNo(e) {
 		e.preventDefault();
 		localStorage.setItem("isClicked", "true");
 		setClicked(true);
-		localStorage.setItem("medicalCondition", "No");
+		localStorage.setItem("medicalCondition", "false");
 		setMedicalCondition("No");
 	}
 	return (
