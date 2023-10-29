@@ -3,6 +3,7 @@ import './App.css';
 
 function App() {
   const [location, setLocation] = useState('');
+  const [apiResponse, setApiResponse] = useState('');
 
   // Function to get and store the user's location
   function getLocation() {
@@ -21,27 +22,30 @@ function App() {
     setLocation(locationString);
   }
 
-  // Function to fetch data from the API
-  async function fetchData(location) {
-    try {
-      const apiUrl = `https://api.openaq.org/v1/latest?has_geo=true&coordinates=${location}&limit=100&radius=25000&order_by=distance`;
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      console.log(data);
-      // You can do more with the API data here
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  // Function to make the API request
+  function makeApiRequest(location) {
+    const apiUrl = `https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(location)}&radius=25000&order_by=distance&dump_raw=false`;
+
+    fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Host: 'api.openaq.org',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setApiResponse(JSON.stringify(data, null, 2)))
+      .catch((error) => setApiResponse('Error: ' + error.message));
   }
 
-  // Use useEffect to call getLocation and fetchData when the component mounts
+  // Use useEffect to call getLocation and makeApiRequest when the component mounts
   useEffect(() => {
     getLocation();
   }, []);
 
   useEffect(() => {
     if (location) {
-      fetchData(location);
+      makeApiRequest(location);
     }
   }, [location]);
 
@@ -49,6 +53,8 @@ function App() {
     <div className="App">
       <h1>User Location</h1>
       <p>{location}</p>
+      <h2>API Response</h2>
+      <pre>{apiResponse}</pre>
     </div>
   );
 }
