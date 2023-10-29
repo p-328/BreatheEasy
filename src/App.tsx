@@ -24,7 +24,7 @@ function App() {
 
   // Function to make the API request
   function makeApiRequest(location) {
-    const apiUrl = `https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(location)}&radius=25000&order_by=distance&dump_raw=false`;
+    const apiUrl = `https://api.openaq.org/v2/locations?limit=1&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(location)}&radius=25000&order_by=distance&dump_raw=false`;
 
     fetch(apiUrl, {
       method: 'GET',
@@ -34,7 +34,16 @@ function App() {
       },
     })
       .then((response) => response.json())
-      .then((data) => setApiResponse(JSON.stringify(data, null, 2)))
+      .then((data) => {
+        if (data.results && data.results.length > 0) {
+          const locationData = data.results[0];
+          const name = locationData.name;
+          const parameters = locationData.parameters.map((param) => `${param.parameter}: ${param.count} ${param.unit}`);
+          setApiResponse(`Name: ${name}\nParameters:\n${parameters.join('\n')}`);
+        } else {
+          setApiResponse('Location data not found.');
+        }
+      })
       .catch((error) => setApiResponse('Error: ' + error.message));
   }
 
