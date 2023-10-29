@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Popup } from './Components/Popup/Popup';
 import './App.css';
 
 function App() {
@@ -120,6 +121,7 @@ function App() {
 
   return (
     <div className="App">
+      <Popup />
       <h1>BreatheEasy</h1>
       <pre>{apiResponse}</pre>
     </div>
