@@ -72,58 +72,57 @@ function App() {
   }
 
   // Function to make the API request
-  // Function to make the API request
-function makeApiRequest(location) {
-  const apiUrl = `https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(location)}&radius=25000&order_by=distance&dump_raw=false`;
+  function makeApiRequest(location) {
+    const apiUrl = `https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(location)}&radius=25000&order_by=distance&dump_raw=false`;
 
-  fetch(apiUrl, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      Host: 'api.openaq.org',
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.results && data.results.length > 0) {
-        const parametersSeen = new Set();
-        let parametersInfo = [];
-        const oneDayAgo = new Date();
-        oneDayAgo.setDate(oneDayAgo.getDate() - 1);
-
-        data.results.forEach((locationData) => {
-          const name = locationData.name;
-          const sensorCoordinates = locationData.coordinates;
-          const sensorDistance = calculateDistance(
-            parseFloat(location.split(',')[0]),
-            parseFloat(location.split(',')[1]),
-            sensorCoordinates.latitude,
-            sensorCoordinates.longitude
-          );
-          const sortedParameters = locationData.parameters
-            .filter((param) =>
-              param.parameter !== 'humidity' &&
-              param.parameter !== 'temperature' &&
-              param.parameter !== 'pressure' &&
-              !parametersSeen.has(param.parameter) &&
-              new Date(param.lastUpdated) > oneDayAgo
-            )
-            .sort(customSort);
-
-          sortedParameters.forEach((param) => {
-            const timeAgo = formatTimeAgo(param.lastUpdated);
-            parametersInfo.push(
-              `${name} (Distance: ${sensorDistance.toFixed(2)} miles): ${param.parameter}: ${param.lastValue} ${param.unit} (Last Updated: ${timeAgo})`
-            );
-            parametersSeen.add(param.parameter);
-          });
-        });
-
-        setApiResponse(`${parametersInfo.join('\n')}`);
-      } else {
-        setApiResponse('Location data not found.');
-      }
+    fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Host: 'api.openaq.org',
+      },
     })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.results && data.results.length > 0) {
+          const parametersSeen = new Set();
+          let parametersInfo = [];
+          const oneDayAgo = new Date();
+          oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+
+          data.results.forEach((locationData) => {
+            const name = locationData.name;
+            const sensorCoordinates = locationData.coordinates;
+            const sensorDistance = calculateDistance(
+              parseFloat(location.split(',')[0]),
+              parseFloat(location.split(',')[1]),
+              sensorCoordinates.latitude,
+              sensorCoordinates.longitude
+            );
+            const sortedParameters = locationData.parameters
+              .filter((param) =>
+                param.parameter !== 'humidity' &&
+                param.parameter !== 'temperature' &&
+                param.parameter !== 'pressure' &&
+                !parametersSeen.has(param.parameter) &&
+                new Date(param.lastUpdated) > oneDayAgo
+              )
+              .sort(customSort);
+
+            sortedParameters.forEach((param) => {
+              const timeAgo = formatTimeAgo(param.lastUpdated);
+              parametersInfo.push(
+                `${name} (Distance: ${sensorDistance.toFixed(2)} miles): ${param.parameter}: ${param.lastValue} ${param.unit} (Last Updated: ${timeAgo})`
+              );
+              parametersSeen.add(param.parameter);
+            });
+          });
+
+          setApiResponse(`${parametersInfo.join('\n')}`);
+        } else {
+          setApiResponse('Location data not found.');
+        }
+      })
     .catch((error) => setApiResponse('Error: ' + error.message));
   }
 
