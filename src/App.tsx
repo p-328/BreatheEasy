@@ -51,7 +51,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>User Location</h1>
+      <h1>BreatheEasy</h1>
       <p>{location}</p>
       <h2>API Response</h2>
       <pre>{apiResponse}</pre>
