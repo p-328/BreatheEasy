@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Popup } from './Components/Popup/Popup';
 import './App.css';
 
 function App() {
@@ -95,6 +96,7 @@ function App() {
 
   return (
     <div className="App">
+      <Popup />
       <h1>BreatheEasy</h1>
       <p>{location}</p>
       <h2>API Response</h2>
