@@ -1,3 +1,3 @@
-# BreatheEasy
+# CleanAirTracker
 
-BreatheEasy: our very extremely greatly incredibly innovative CAC qualifier!
+CleanAirTracker: our very extremely greatly incredibly innovative CAC qualifier!
