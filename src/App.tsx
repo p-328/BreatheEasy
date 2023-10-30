@@ -117,7 +117,6 @@ function App() {
     )}&radius=25000&order_by=distance&dump_raw=false`;
     const medicalCondition = localStorage.getItem('medicalCondition') === 'true';
 
-
     fetch(apiUrl, {
       method: 'GET',
       headers: {
@@ -143,13 +142,16 @@ function App() {
               sensorCoordinates.longitude
             );
             const sortedParameters = locationData.parameters
-              .filter((param) =>
-                param.parameter !== 'humidity' &&
-                param.parameter !== 'temperature' &&
-                param.parameter !== 'pressure' &&
-                !parametersSeen.has(param.parameter) &&
-                new Date(param.lastUpdated) > oneDayAgo
-              )
+              .filter((param) => {
+                const normalizedDisplayNameJSON = normalizeDisplayName(param.displayName);
+                return (
+                  !parametersSeen.has(param.parameter) &&
+                  new Date(param.lastUpdated) > oneDayAgo &&
+                  airPollutantsData.airPollutants.some((item) =>
+                    normalizeDisplayName(item.displayName).toLowerCase() === normalizedDisplayNameJSON.toLowerCase()
+                  )
+                );
+              })
               .sort(customSort);
 
             sortedParameters.forEach((param) => {
