@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Popup } from './Components/Popup/Popup';
+import airPollutantsData from './airPollutantsData.json';
 import './App.css';
 
 function App() {
@@ -71,9 +72,51 @@ function App() {
     return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
   }
 
+  // Function to get safety level based on lastValue, parameter, and medicalCondition
+  // Function to get safety level based on lastValue, parameter, and medicalCondition
+  function getSafetyLevel(displayName, lastValue, medicalCondition) {
+    // Replace special characters in displayName and normalize it
+    const normalizedDisplayNameJSON = normalizeDisplayName(displayName);
+    
+    const pollutant = airPollutantsData.airPollutants.find(
+      (item) => normalizeDisplayName(item.displayName).toLowerCase() === normalizedDisplayNameJSON.toLowerCase()
+    );
+
+    if (pollutant) {
+      const thresholds = pollutant.threshold;
+      const medicalKey = medicalCondition ? "true" : "false";
+      const safetyThreshold = thresholds.Safe[medicalKey];
+      const unsafeThreshold = thresholds.Unsafe[medicalKey];
+
+      if (lastValue <= safetyThreshold) {
+        return 'Safe';
+      } else if (lastValue <= unsafeThreshold) {
+        return 'Unsafe';
+      } else {
+        return 'Dangerous';
+      }
+    }
+
+    return 'Unknown'; // Default to 'Unknown' if the pollutant is not found
+  }
+  
+  // Function to normalize a displayName
+  function normalizeDisplayName(displayName) {
+    return displayName
+      .replace('²', '2')
+      .replace('₃', '3')
+      .replace('³', '3')
+      .replace('₂', '2')
+      .replace('µ', 'u');
+  }  
+
   // Function to make the API request
   function makeApiRequest(location) {
-    const apiUrl = `https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(location)}&radius=25000&order_by=distance&dump_raw=false`;
+    const apiUrl = `https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(
+      location
+    )}&radius=25000&order_by=distance&dump_raw=false`;
+    const medicalCondition = localStorage.getItem('medicalCondition') === 'true';
+
 
     fetch(apiUrl, {
       method: 'GET',
@@ -111,8 +154,9 @@ function App() {
 
             sortedParameters.forEach((param) => {
               const timeAgo = formatTimeAgo(param.lastUpdated);
+              const safetyLevel = getSafetyLevel(param.displayName, param.lastValue, medicalCondition);
               parametersInfo.push(
-                `${name} (Distance: ${sensorDistance.toFixed(2)} miles): ${param.parameter}: ${param.lastValue} ${param.unit} (Last Updated: ${timeAgo})`
+                `${name} (Distance: ${sensorDistance.toFixed(2)} miles): ${param.parameter}: ${param.lastValue} ${param.unit} (Safety: ${safetyLevel}) (Last Updated: ${timeAgo})`
               );
               parametersSeen.add(param.parameter);
             });
@@ -123,7 +167,7 @@ function App() {
           setApiResponse('Location data not found.');
         }
       })
-    .catch((error) => setApiResponse('Error: ' + error.message));
+      .catch((error) => setApiResponse('Error: ' + error.message));
   }
 
   // Use useEffect to call getLocation and makeApiRequest when the component mounts
