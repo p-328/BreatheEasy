@@ -1,0 +1,480 @@
+{
+  "airPollutants": [
+    {
+      "displayName": "PM10 µg/m³",
+      "threshold": {
+        "Safe": {
+          "true": 20,
+          "false": 30
+        },
+        "Unsafe": {
+          "true": 40,
+          "false": 50
+        },
+        "Dangerous": {
+          "true": 60,
+          "false": 70
+        }
+      }
+    },
+    {
+      "displayName": "PM2.5 µg/m³",
+      "threshold": {
+        "Safe": {
+          "true": 10,
+          "false": 15
+        },
+        "Unsafe": {
+          "true": 20,
+          "false": 25
+        },
+        "Dangerous": {
+          "true": 30,
+          "false": 35
+        }
+      }
+    },
+    {
+      "displayName": "O₃ mass µg/m³",
+      "threshold": {
+        "Safe": {
+          "true": 5,
+          "false": 8
+        },
+        "Unsafe": {
+          "true": 10,
+          "false": 15
+        },
+        "Dangerous": {
+          "true": 20,
+          "false": 25
+        }
+      }
+    },
+    {
+      "displayName": "CO mass µg/m³",
+      "threshold": {
+        "Safe": {
+          "true": 100,
+          "false": 150
+        },
+        "Unsafe": {
+          "true": 200,
+          "false": 250
+        },
+        "Dangerous": {
+          "true": 300,
+          "false": 350
+        }
+      }
+    },
+    {
+      "displayName": "NO₂ mass µg/m³",
+      "threshold": {
+        "Safe": {
+          "true": 10,
+          "false": 15
+        },
+        "Unsafe": {
+          "true": 20,
+          "false": 25
+        },
+        "Dangerous": {
+          "true": 30,
+          "false": 35
+        }
+      }
+    },
+    {
+      "displayName": "SO₂ mass µg/m³",
+      "threshold": {
+        "Safe": {
+          "true": 5,
+          "false": 8
+        },
+        "Unsafe": {
+          "true": 10,
+          "false": 15
+        },
+        "Dangerous": {
+          "true": 20,
+          "false": 25
+        }
+      }
+    },
+    {
+      "displayName": "NO₂ ppm",
+      "threshold": {
+        "Safe": {
+          "true": 0.01,
+          "false": 0.015
+        },
+        "Unsafe": {
+          "true": 0.02,
+          "false": 0.025
+        },
+        "Dangerous": {
+          "true": 0.03,
+          "false": 0.035
+        }
+      }
+    },
+    {
+      "displayName": "CO ppm",
+      "threshold": {
+        "Safe": {
+          "true": 0.5,
+          "false": 0.8
+        },
+        "Unsafe": {
+          "true": 1.0,
+          "false": 1.5
+        },
+        "Dangerous": {
+          "true": 2.0,
+          "false": 2.5
+        }
+      }
+    },
+    {
+      "displayName": "SO₂ ppm",
+      "threshold": {
+        "Safe": {
+          "true": 0.005,
+          "false": 0.008
+        },
+        "Unsafe": {
+          "true": 0.01,
+          "false": 0.015
+        },
+        "Dangerous": {
+          "true": 0.02,
+          "false": 0.025
+        }
+      }
+    },
+    {
+      "displayName": "O₃ ppm",
+      "threshold": {
+        "Safe": {
+          "true": 0.02,
+          "false": 0.03
+        },
+        "Unsafe": {
+          "true": 0.04,
+          "false": 0.05
+        },
+        "Dangerous": {
+          "true": 0.06,
+          "false": 0.07
+        }
+      }
+    },
+    {
+      "displayName": "BC µg/m³",
+      "threshold": {
+        "Safe": {
+          "true": 1,
+          "false": 2
+        },
+        "Unsafe": {
+          "true": 3,
+          "false": 4
+        },
+        "Dangerous": {
+          "true": 5,
+          "false": 6
+        }
+      }
+    },
+    {
+      "displayName": "NO₂ ppb",
+      "threshold": {
+        "Safe": {
+          "true": 100,
+          "false": 150
+        },
+        "Unsafe": {
+          "true": 200,
+          "false": 250
+        },
+        "Dangerous": {
+          "true": 300,
+          "false": 350
+        }
+      }
+    },
+    {
+      "displayName": "PM1 µg/m³",
+      "threshold": {
+        "Safe": {
+          "true": 15,
+          "false": 20
+        },
+        "Unsafe": {
+          "true": 25,
+          "false": 30
+        },
+        "Dangerous": {
+          "true": 35,
+          "false": 40
+        }
+      }
+    },
+    {
+      "displayName": "CO₂ ppm",
+      "threshold": {
+        "Safe": {
+          "true": 350,
+          "false": 400
+        },
+        "Unsafe": {
+          "true": 600,
+          "false": 800
+        },
+        "Dangerous": {
+          "true": 1000,
+          "false": 1200
+        }
+      }
+    },
+    {
+      "displayName": "NO ppb",
+      "threshold": {
+        "Safe": {
+          "true": 50,
+          "false": 60
+        },
+        "Unsafe": {
+          "true": 70,
+          "false": 80
+        },
+        "Dangerous": {
+          "true": 90,
+          "false": 100
+        }
+      }
+    },
+    {
+      "displayName": "NOx mass µg/m³",
+      "threshold": {
+        "Safe": {
+          "true": 20,
+          "false": 30
+        },
+        "Unsafe": {
+          "true": 40,
+          "false": 50
+        },
+        "Dangerous": {
+          "true": 60,
+          "false": 70
+        }
+      }
+    },
+    {
+      "displayName": "NO ppm",
+      "threshold": {
+        "Safe": {
+          "true": 0.02,
+          "false": 0.03
+        },
+        "Unsafe": {
+          "true": 0.04,
+          "false": 0.05
+        },
+        "Dangerous": {
+          "true": 0.06,
+          "false": 0.07
+        }
+      }
+    },
+    {
+      "displayName": "PM0.3 count particles/cm³",
+      "threshold": {
+        "Safe": {
+          "true": 100,
+          "false": 150
+        },
+        "Unsafe": {
+          "true": 200,
+          "false": 250
+        },
+        "Dangerous": {
+          "true": 300,
+          "false": 350
+        }
+      }
+    },
+    {
+      "displayName": "PM1 count particles/cm³",
+      "threshold": {
+        "Safe": {
+          "true": 200,
+          "false": 250
+        },
+        "Unsafe": {
+          "true": 400,
+          "false": 500
+        },
+        "Dangerous": {
+          "true": 600,
+          "false": 700
+        }
+      }
+    },
+    {
+      "displayName": "PM5.0 count particles/cm³",
+      "threshold": {
+        "Safe": {
+          "true": 500,
+          "false": 600
+        },
+        "Unsafe": {
+          "true": 800,
+          "false": 900
+        },
+        "Dangerous": {
+          "true": 1000,
+          "false": 1100
+        }
+      }
+    },
+    {
+      "displayName": "PM2.5 count particles/cm³",
+      "threshold": {
+        "Safe": {
+          "true": 300,
+          "false": 350
+        },
+        "Unsafe": {
+          "true": 500,
+          "false": 600
+        },
+        "Dangerous": {
+          "true": 700,
+          "false": 800
+        }
+      }
+    },
+    {
+      "displayName": "PM0.5 particles/cm³",
+      "threshold": {
+        "Safe": {
+          "true": 50,
+          "false": 60
+        },
+        "Unsafe": {
+          "true": 70,
+          "false": 80
+        },
+        "Dangerous": {
+          "true": 90,
+          "false": 100
+        }
+      }
+    },
+    {
+      "displayName": "PM10 count particles/cm³",
+      "threshold": {
+        "Safe": {
+          "true": 500,
+          "false": 600
+        },
+        "Unsafe": {
+          "true": 800,
+          "false": 900
+        },
+        "Dangerous": {
+          "true": 1000,
+          "false": 1100
+        }
+      }
+    },
+    {
+      "displayName": "VOC iaq",
+      "threshold": {
+        "Safe": {
+          "true": 1,
+          "false": 2
+        },
+        "Unsafe": {
+          "true": 3,
+          "false": 4
+        },
+        "Dangerous": {
+          "true": 5,
+          "false": 6
+        }
+      }
+    },
+    {
+      "displayName": "O₃ ppb",
+      "threshold": {
+        "Safe": {
+          "true": 10,
+          "false": 15
+        },
+        "Unsafe": {
+          "true": 20,
+          "false": 25
+        },
+        "Dangerous": {
+          "true": 30,
+          "false": 35
+        }
+      }
+    },
+    {
+      "displayName": "NOx ppm",
+      "threshold": {
+        "Safe": {
+          "true": 0.01,
+          "false": 0.015
+        },
+        "Unsafe": {
+          "true": 0.02,
+          "false": 0.025
+        },
+        "Dangerous": {
+          "true": 0.03,
+          "false": 0.035
+        }
+      }
+    },
+    {
+      "displayName": "NO mass µg/m³",
+      "threshold": {
+        "Safe": {
+          "true": 10,
+          "false": 15
+        },
+        "Unsafe": {
+          "true": 20,
+          "false": 25
+        },
+        "Dangerous": {
+          "true": 30,
+          "false": 35
+        }
+      }
+    },
+    {
+      "displayName": "PM4.0 µg/m³",
+      "threshold": {
+        "Safe": {
+          "true": 25,
+          "false": 30
+        },
+        "Unsafe": {
+          "true": 35,
+          "false": 40
+        },
+        "Dangerous": {
+          "true": 45,
+          "false": 50
+        }
+      }
+    }
+  ]
+}
