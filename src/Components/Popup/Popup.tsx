@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 export const Popup = () => {
 	const [medicalCondition, setMedicalCondition] = useState("");
 	const [clicked, setClicked] = useState(false);
@@ -28,14 +32,14 @@ export const Popup = () => {
 			{
 				!clicked ?  
 					<div>
-						<p>Do you have a medical condition that is associated with respiratory issues (pneumonia, bronchitis, etc.)?</p>
+					    <p>Do you have a medical condition that is associated with respiratory issues (pneumonia, bronchitis, etc.)?</p>
 						<br />
 						<button onClick={handleYes}>
-						 	Yes
+							Yes
 						</button>
 						<button onClick={handleNo}>
 							No
-						</button>
+						</button>  
 					</div>
 					: <div></div> 
 			}

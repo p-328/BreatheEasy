@@ -5,7 +5,7 @@ import './App.css';
 
 function App() {
   const [location, setLocation] = useState('');
-  const [apiResponse, setApiResponse] = useState('');
+  const [apiResponse, setApiResponse] = useState([]);
 
   // Function to get and store the user's location
   function getLocation() {
@@ -73,7 +73,6 @@ function App() {
   }
 
   // Function to get safety level based on lastValue, parameter, and medicalCondition
-  // Function to get safety level based on lastValue, parameter, and medicalCondition
   function getSafetyLevel(displayName, lastValue, medicalCondition) {
     // Replace special characters in displayName and normalize it
     const normalizedDisplayNameJSON = normalizeDisplayName(displayName);
@@ -128,7 +127,9 @@ function App() {
       .then((data) => {
         if (data.results && data.results.length > 0) {
           const parametersSeen = new Set();
-          let parametersInfo = [];
+          let parametersInfo = {
+            parameters: []
+          };
           const oneDayAgo = new Date();
           oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 
@@ -157,14 +158,22 @@ function App() {
             sortedParameters.forEach((param) => {
               const timeAgo = formatTimeAgo(param.lastUpdated);
               const safetyLevel = getSafetyLevel(param.displayName, param.lastValue, medicalCondition);
-              parametersInfo.push(
-                `${name} (Distance: ${sensorDistance.toFixed(2)} miles): ${param.parameter}: ${param.lastValue} ${param.unit} (Safety: ${safetyLevel}) (Last Updated: ${timeAgo})`
+
+              parametersInfo.parameters.push(
+                {
+                  location: name,
+                  distance: sensorDistance.toFixed(2),
+                  parameter: param.parameter,
+                  lastValue: param.lastValue,
+                  paramUnit: param.unit,
+                  safety: safetyLevel,
+                  lastUpdated: timeAgo
+                }
               );
               parametersSeen.add(param.parameter);
             });
           });
-
-          setApiResponse(`${parametersInfo.join('\n')}`);
+          setApiResponse(prev => [...prev, parametersInfo]);
         } else {
           setApiResponse('Location data not found.');
         }
@@ -187,7 +196,10 @@ function App() {
     <div className="App">
       <Popup />
       <h1>BreatheEasy</h1>
-      <pre>{apiResponse}</pre>
+      <pre>{apiResponse.map(parametersInfoObj => 
+            parametersInfoObj.parameters.map(obj => 
+              <p>{obj.location} (Distance: {obj.distance} miles): {obj.parameter}: {obj.lastValue} {obj.paramUnit} (Safety: {obj.safety}) (Last Updated: {obj.lastUpdated})</p>
+            ))}</pre>
     </div>
   );
 }
