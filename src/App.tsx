@@ -186,7 +186,7 @@ function App() {
   return (
     <div className="App">
       <Popup />
-      <h1>BreatheEasy</h1>
+      <h1>CleanAirTracker</h1>
       <pre>{apiResponse}</pre>
     </div>
   );
