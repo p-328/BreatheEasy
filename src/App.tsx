@@ -195,11 +195,16 @@ function App() {
   return (
     <div className="App">
       <Popup />
+<<<<<<< HEAD
       <h1>BreatheEasy</h1>
       <pre>{apiResponse.map(parametersInfoObj => 
             parametersInfoObj.parameters.map(obj => 
               <p>{obj.location} (Distance: {obj.distance} miles): {obj.parameter}: {obj.lastValue} {obj.paramUnit} (Safety: {obj.safety}) (Last Updated: {obj.lastUpdated})</p>
             ))}</pre>
+=======
+      <h1>CleanAirTracker</h1>
+      <pre>{apiResponse}</pre>
+>>>>>>> 8f79d9517e86d37b570aea7d4bcab787fb4f27b0
     </div>
   );
 }
