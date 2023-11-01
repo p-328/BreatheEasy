@@ -5,7 +5,7 @@ import './App.css';
 
 function App() {
   const [location, setLocation] = useState('');
-  const [apiResponse, setApiResponse] = useState([]);
+  const [apiResponse, setApiResponse]: any = useState([]);
 
   // Function to get and store the user's location
   function getLocation() {
@@ -17,7 +17,7 @@ function App() {
   }
 
   // Function to display the user's location in "lat,lng" format
-  function showPosition(position) {
+  function showPosition(position: any) {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     const locationString = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
@@ -26,7 +26,7 @@ function App() {
   }
 
   // Custom sorting function to sort parameter names correctly
-  function customSort(a, b) {
+  function customSort(a: any, b: any) {
     const nameA = a.parameter.toLowerCase();
     const nameB = b.parameter.toLowerCase();
 
@@ -45,7 +45,7 @@ function App() {
   }
 
   // Function to calculate the Haversine distance between two coordinates
-  function calculateDistance(lat1, lon1, lat2, lon2) {
+  function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
     const radlat1 = (Math.PI * lat1) / 180;
     const radlat2 = (Math.PI * lat2) / 180;
     const theta = lon1 - lon2;
@@ -60,10 +60,10 @@ function App() {
   }
 
   // Function to format timestamp as "hours/minutes ago"
-  function formatTimeAgo(timestamp) {
+  function formatTimeAgo(timestamp: string) {
     const now = new Date();
     const updatedTime = new Date(timestamp);
-    const diff = now - updatedTime;
+    const diff = now.getTime() - updatedTime.getTime();
     const hours = Math.floor(diff / 3600000); // 1 hour = 3600000 milliseconds
     if (hours > 0) {
       return `${hours} hour${hours > 1 ? 's' : ''} ago`;
@@ -73,7 +73,7 @@ function App() {
   }
 
   // Function to get safety level based on lastValue, parameter, and medicalCondition
-  function getSafetyLevel(displayName, lastValue, medicalCondition) {
+  function getSafetyLevel(displayName: string, lastValue: number, medicalCondition: boolean) {
     // Replace special characters in displayName and normalize it
     const normalizedDisplayNameJSON = normalizeDisplayName(displayName);
     
@@ -100,7 +100,7 @@ function App() {
   }
   
   // Function to normalize a displayName
-  function normalizeDisplayName(displayName) {
+  function normalizeDisplayName(displayName: string) {
     return displayName
       .replace('²', '2')
       .replace('₃', '3')
@@ -110,7 +110,7 @@ function App() {
   }  
 
   // Function to make the API request
-  function makeApiRequest(location) {
+  function makeApiRequest(location: string) {
     const apiUrl = `https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&coordinates=${encodeURIComponent(
       location
     )}&radius=25000&order_by=distance&dump_raw=false`;
@@ -123,8 +123,8 @@ function App() {
         Host: 'api.openaq.org',
       },
     })
-      .then((response) => response.json())
-      .then((data) => {
+      .then((response: any) => response.json())
+      .then((data: any) => {
         if (data.results && data.results.length > 0) {
           const parametersSeen = new Set();
           let parametersInfo = {
@@ -133,7 +133,7 @@ function App() {
           const oneDayAgo = new Date();
           oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 
-          data.results.forEach((locationData) => {
+          data.results.forEach((locationData: any) => {
             const name = locationData.name;
             const sensorCoordinates = locationData.coordinates;
             const sensorDistance = calculateDistance(
@@ -143,19 +143,19 @@ function App() {
               sensorCoordinates.longitude
             );
             const sortedParameters = locationData.parameters
-              .filter((param) => {
+              .filter((param: any) => {
                 const normalizedDisplayNameJSON = normalizeDisplayName(param.displayName);
                 return (
                   !parametersSeen.has(param.parameter) &&
                   new Date(param.lastUpdated) > oneDayAgo &&
-                  airPollutantsData.airPollutants.some((item) =>
+                  airPollutantsData.airPollutants.some((item: any) =>
                     normalizeDisplayName(item.displayName).toLowerCase() === normalizedDisplayNameJSON.toLowerCase()
                   )
                 );
               })
               .sort(customSort);
 
-            sortedParameters.forEach((param) => {
+            sortedParameters.forEach((param: any) => {
               const timeAgo = formatTimeAgo(param.lastUpdated);
               const safetyLevel = getSafetyLevel(param.displayName, param.lastValue, medicalCondition);
 
@@ -173,12 +173,17 @@ function App() {
               parametersSeen.add(param.parameter);
             });
           });
-          setApiResponse(prev => [...prev, parametersInfo]);
+        if (apiResponse)
+            setApiResponse((prev: any) => [...prev, parametersInfo]);
         } else {
-          setApiResponse('Location data not found.');
+          setApiResponse('');
         }
       })
-      .catch((error) => setApiResponse('Error: ' + error.message));
+      .catch((error) => setApiResponse([
+          {
+            error: "Error: " + error.message
+          }
+        ]));
   }
 
   // Use useEffect to call getLocation and makeApiRequest when the component mounts
@@ -195,16 +200,11 @@ function App() {
   return (
     <div className="App">
       <Popup />
-<<<<<<< HEAD
-      <h1>BreatheEasy</h1>
-      <pre>{apiResponse.map(parametersInfoObj => 
-            parametersInfoObj.parameters.map(obj => 
+      <h1>CleanAirTracker</h1>
+      <pre>{apiResponse.map((parametersInfoObj: any) => 
+            parametersInfoObj.parameters.map((obj: any) => 
               <p>{obj.location} (Distance: {obj.distance} miles): {obj.parameter}: {obj.lastValue} {obj.paramUnit} (Safety: {obj.safety}) (Last Updated: {obj.lastUpdated})</p>
             ))}</pre>
-=======
-      <h1>CleanAirTracker</h1>
-      <pre>{apiResponse}</pre>
->>>>>>> 8f79d9517e86d37b570aea7d4bcab787fb4f27b0
     </div>
   );
 }

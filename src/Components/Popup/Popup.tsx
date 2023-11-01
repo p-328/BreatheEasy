@@ -1,31 +1,22 @@
 import { useState, useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 
 export const Popup = () => {
-	const [medicalCondition, setMedicalCondition] = useState("");
 	const [clicked, setClicked] = useState(false);
-	useEffect(() => {
-		setMedicalCondition(localStorage.getItem("medicalCondition"));
-	}, []);
 	useEffect(() => {
 		if (localStorage.getItem("isClicked") == "true")
 			setClicked(true);
 	}, []);
-	function handleYes(e) {
+	function handleYes(e: any) {
 		e.preventDefault();
 		localStorage.setItem("isClicked", "true");
 		setClicked(true);
 		localStorage.setItem("medicalCondition", "true");
-		setMedicalCondition("Yes");
 	} 
-	function handleNo(e) {
+	function handleNo(e: any) {
 		e.preventDefault();
 		localStorage.setItem("isClicked", "true");
 		setClicked(true);
 		localStorage.setItem("medicalCondition", "false");
-		setMedicalCondition("No");
 	}
 	return (
 		<div>
